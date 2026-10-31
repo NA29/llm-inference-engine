@@ -36,7 +36,7 @@ engine_image = (
 # vLLM pins its own torch, so it lives in a separate image.
 vllm_image = (
     modal.Image.debian_slim(python_version="3.11")
-    .pip_install("vllm==0.10.1.1", "numpy", "datasets==3.1.0")
+    .pip_install("vllm==0.10.1.1", "transformers==4.56.2", "numpy", "datasets==3.1.0")
     .env({"HF_HOME": "/hf", "MODEL_ID": MODEL_ID})
     .add_local_dir(".", REPO_DIR, ignore=_ignore)
 )
@@ -61,7 +61,8 @@ def _run(cmd: str, git_sha: str) -> dict[str, bytes]:
     header = (f"# cmd: {cmd}\n# git_sha: {git_sha}\n# started: {started}\n"
               f"# modal_task_id: {os.environ.get('MODAL_TASK_ID')}\n# exit_code: {proc.returncode}\n"
               f"# nvidia-smi at end of run:\n{smi}\n")
-    out = {f: (Path(RESULTS_DIR) / f).read_bytes() for f in os.listdir(RESULTS_DIR)}
+    root = Path(RESULTS_DIR)
+    out = {str(p.relative_to(root)): p.read_bytes() for p in root.rglob("*") if p.is_file()}
     name = cmd.split()[0].replace("bench.", "").replace("tests.", "")
     out[f"logs/{name}_{started.replace(':', '')}.log"] = (header + "".join(lines)).encode()
     return out
@@ -80,7 +81,7 @@ def run_vllm(cmd: str, git_sha: str) -> dict[str, bytes]:
 @app.local_entrypoint()
 def main(cmd: str = "bench.env", vllm: bool = False):
     sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
-    dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout.strip()
+    dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True).stdout.strip()
     sha = (sha or "uncommitted") + ("-dirty" if dirty else "")
     files = (run_vllm if vllm else run_engine).remote(cmd, sha)
     for name, data in files.items():
