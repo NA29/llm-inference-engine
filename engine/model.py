@@ -137,8 +137,10 @@ class LlamaModel(nn.Module):
             x = layer(x, positions, self.rope, meta)
         return self.norm(x)
 
-    def compute_logits(self, hidden: torch.Tensor) -> torch.Tensor:
+    def compute_logits(self, hidden: torch.Tensor, out: torch.Tensor | None = None) -> torch.Tensor:
         w = self.embed_tokens.weight if self.cfg.tie_word_embeddings else self.lm_head.weight
+        if out is not None:
+            return torch.matmul(hidden, w.t(), out=out)
         return F.linear(hidden, w)
 
     @torch.no_grad()
