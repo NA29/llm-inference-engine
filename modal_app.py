@@ -75,12 +75,12 @@ def _run(cmd: str, git_sha: str, gpu_name: str) -> dict[str, bytes] | None:
     return out
 
 
-@app.function(gpu=GPU, image=engine_image, volumes={"/hf": hf_cache}, timeout=3 * 3600)
+@app.function(gpu=GPU, image=engine_image, volumes={"/hf": hf_cache}, timeout=3 * 3600, single_use_containers=True)
 def run_engine(cmd: str, git_sha: str, gpu_name: str):
     return _run(cmd, git_sha, gpu_name)
 
 
-@app.function(gpu=GPU, image=vllm_image, volumes={"/hf": hf_cache}, timeout=3 * 3600)
+@app.function(gpu=GPU, image=vllm_image, volumes={"/hf": hf_cache}, timeout=3 * 3600, single_use_containers=True)
 def run_vllm(cmd: str, git_sha: str, gpu_name: str):
     return _run(cmd, git_sha, gpu_name)
 
