@@ -44,7 +44,14 @@ vllm_image = (
 app = modal.App("llm-inference-engine")
 
 
-def _run(cmd: str, git_sha: str) -> dict[str, bytes]:
+def _run(cmd: str, git_sha: str, gpu_name: str) -> dict[str, bytes] | None:
+    # Modal's "A10G" pool also contains A10s (72 SMs, 150 W vs 80 SMs, 300 W); results are
+    # only comparable on one model, so refuse to run on anything else and let the caller retry.
+    found = subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+                           capture_output=True, text=True).stdout.strip()
+    if gpu_name and found != gpu_name:
+        print(f"got {found!r}, need {gpu_name!r}; retrying on another machine")
+        return None
     os.makedirs(RESULTS_DIR, exist_ok=True)
     env = dict(os.environ, RESULTS_DIR=RESULTS_DIR, GIT_SHA=git_sha, PYTHONUNBUFFERED="1")
     argv = ["python", "-m", *cmd.split()]  # "bench.x ..." or "pytest ..."
@@ -69,21 +76,27 @@ def _run(cmd: str, git_sha: str) -> dict[str, bytes]:
 
 
 @app.function(gpu=GPU, image=engine_image, volumes={"/hf": hf_cache}, timeout=3 * 3600)
-def run_engine(cmd: str, git_sha: str) -> dict[str, bytes]:
-    return _run(cmd, git_sha)
+def run_engine(cmd: str, git_sha: str, gpu_name: str):
+    return _run(cmd, git_sha, gpu_name)
 
 
 @app.function(gpu=GPU, image=vllm_image, volumes={"/hf": hf_cache}, timeout=3 * 3600)
-def run_vllm(cmd: str, git_sha: str) -> dict[str, bytes]:
-    return _run(cmd, git_sha)
+def run_vllm(cmd: str, git_sha: str, gpu_name: str):
+    return _run(cmd, git_sha, gpu_name)
 
 
 @app.local_entrypoint()
-def main(cmd: str = "bench.env", vllm: bool = False):
+def main(cmd: str = "bench.env", vllm: bool = False, gpu_name: str = "NVIDIA A10G"):
     sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
     dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True).stdout.strip()
     sha = (sha or "uncommitted") + ("-dirty" if dirty else "")
-    files = (run_vllm if vllm else run_engine).remote(cmd, sha)
+    fn = run_vllm if vllm else run_engine
+    for _ in range(20):
+        files = fn.remote(cmd, sha, gpu_name)
+        if files is not None:
+            break
+    else:
+        raise RuntimeError(f"no {gpu_name} available")
     for name, data in files.items():
         path = Path("results") / name
         path.parent.mkdir(parents=True, exist_ok=True)
