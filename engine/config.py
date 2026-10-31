@@ -53,7 +53,7 @@ class EngineConfig:
     max_model_len: int = 2048            # max prompt + output length of one request
     gpu_memory_utilization: float = 0.90
     num_kv_blocks: int | None = None     # fixed KV pool size; None = size it from free memory
-    attn_backend: str = "torch"         # "triton" (paged kernel) or "torch" (eager gather)
+    attn_backend: str = "triton"         # "triton" (paged kernel) or "torch" (eager gather)
     use_cuda_graphs: bool = False
     scheduling: str = "continuous"       # "continuous" or "static"
     kv_allocation: str = "paged"         # "paged" (on demand) or "prealloc" (max_model_len per request)

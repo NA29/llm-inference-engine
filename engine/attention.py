@@ -83,4 +83,7 @@ def paged_decode_attention_torch(q: torch.Tensor, k_cache: torch.Tensor, v_cache
 
 def decode_attention(q: torch.Tensor, k_cache: torch.Tensor, v_cache: torch.Tensor,
                      meta: AttentionMetadata, scale: float) -> torch.Tensor:
+    if meta.backend == "triton":
+        from engine.triton_attention import paged_decode_attention
+        return paged_decode_attention(q, k_cache, v_cache, meta.block_tables, meta.context_lens, scale)
     return paged_decode_attention_torch(q, k_cache, v_cache, meta.block_tables, meta.context_lens, scale)
