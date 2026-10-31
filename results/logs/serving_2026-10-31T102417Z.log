@@ -1,0 +1,40 @@
+# cmd: bench.serving --scheduling static --rates 0.125,0.25,0.5,1,2,4,8,16
+# git_sha: c5c8c98
+# started: 2026-10-31T10:24:17Z
+# modal_task_id: ta-01M68QT4079VB9ZGW9T327C9MR
+# exit_code: 0
+# nvidia-smi at end of run:
+Sat Oct 31 11:21:30 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |
+|  0%   44C    P0             76W /  300W |       3MiB /  23028MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 1399.66it/s]
+static rate=0.12 req/s  p99 TTFT=858 ms  mean TPOT=6.9 ms  -> violates SLO
+static rate=0.25 req/s  p99 TTFT=907 ms  mean TPOT=6.9 ms  -> violates SLO
+static rate=0.50 req/s  p99 TTFT=1133 ms  mean TPOT=7.0 ms  -> violates SLO
+static rate=1.00 req/s  p99 TTFT=1155 ms  mean TPOT=7.1 ms  -> violates SLO
+static rate=2.00 req/s  p99 TTFT=1399 ms  mean TPOT=7.3 ms  -> violates SLO
+static rate=4.00 req/s  p99 TTFT=1686 ms  mean TPOT=7.7 ms  -> violates SLO
+static rate=8.00 req/s  p99 TTFT=2171 ms  mean TPOT=8.9 ms  -> violates SLO
+static rate=16.00 req/s  p99 TTFT=3340 ms  mean TPOT=13.6 ms  -> violates SLO
+static: max rate under p99 TTFT <= 500 ms: 0.00 req/s
+wrote /root/results/serving_static.json

@@ -1,0 +1,43 @@
+# cmd: bench.hf_parity --dtype bfloat16
+# git_sha: ee7ba14
+# started: 2026-10-31T11:07:58Z
+# modal_task_id: ta-01M68TA4BHT4EPTEXKZ1N0M9DR
+# exit_code: 0
+# nvidia-smi at end of run:
+Sat Oct 31 11:24:09 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:18.0 Off |                    0 |
+|  0%   36C    P0             60W /  300W |       3MiB /  23028MiB |      1%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 647.70it/s]
+From v4.47 onwards, when a model cache is to be returned, `generate` will return a `Cache` instance instead by default (as opposed to the legacy tuple of tuples format). If you want to keep returning the legacy format, please set `return_legacy_cache=True`.
+100/1000 prompts checked, 67 exact matches
+200/1000 prompts checked, 124 exact matches
+300/1000 prompts checked, 188 exact matches
+400/1000 prompts checked, 243 exact matches
+500/1000 prompts checked, 305 exact matches
+600/1000 prompts checked, 364 exact matches
+700/1000 prompts checked, 429 exact matches
+800/1000 prompts checked, 485 exact matches
+900/1000 prompts checked, 540 exact matches
+1000/1000 prompts checked, 599 exact matches
+bfloat16: 599/1000 prompts match HF exactly; 396 of the 401 divergences are at a near-tie (top-2 margin < 0.25)
+wrote /root/results/hf_parity_bfloat16.json

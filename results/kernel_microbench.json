@@ -1,0 +1,78 @@
+{
+  "env": {
+    "timestamp_utc": "2026-10-31T11:15:39Z",
+    "git_sha": "1d8b8c1",
+    "modal_task_id": "ta-01M68TQWN35HQ4RNXPEVMB4B2R",
+    "hostname": "modal",
+    "python": "3.11.18",
+    "cpu": "unknown",
+    "gpu_query": "name, uuid, driver_version, memory.total [MiB], clocks.max.sm [MHz], clocks.max.memory [MHz], power.limit [W]\nNVIDIA A10G, GPU-5e7fa759-a80a-a97a-df60-cdcd0151598d, 610.57.04, 23028 MiB, 1710 MHz, 6251 MHz, 300.00 W",
+    "nvidia_smi": "Sat Oct 31 11:15:40 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:18.0 Off |                    0 |\n|  0%   39C    P0            217W /  300W |    1841MiB /  23028MiB |    100%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A               1      C   /bin/dumb-init                         1832MiB |\n+-----------------------------------------------------------------------------------------+",
+    "torch": "2.5.1+cu124",
+    "triton": "3.1.0",
+    "transformers": "4.46.3",
+    "cuda": "12.4",
+    "device": {
+      "name": "NVIDIA A10G",
+      "total_memory_gb": 22.06,
+      "sm_count": 80,
+      "capability": "8.6"
+    }
+  },
+  "rows": [
+    {
+      "batch": 1,
+      "ctx": 512,
+      "torch_ms": 0.3649635314941406,
+      "triton_tile32_ms": 0.09063424110412598,
+      "triton_tile64_ms": 0.08862719535827637,
+      "triton_tile128_ms": 0.09053183555603027,
+      "triton_best_GBps": 11.831312000352943
+    },
+    {
+      "batch": 8,
+      "ctx": 512,
+      "torch_ms": 0.4022476959228516,
+      "triton_tile32_ms": 0.08927231788635254,
+      "triton_tile64_ms": 0.08879103660583496,
+      "triton_tile128_ms": 0.08846336364746094,
+      "triton_best_GBps": 94.82578611220114
+    },
+    {
+      "batch": 32,
+      "ctx": 512,
+      "torch_ms": 0.8656486511230469,
+      "triton_tile32_ms": 0.07428095817565918,
+      "triton_tile64_ms": 0.07714816093444825,
+      "triton_tile128_ms": 0.076943359375,
+      "triton_best_GBps": 451.72319830138264
+    },
+    {
+      "batch": 64,
+      "ctx": 512,
+      "torch_ms": 1.6696217346191407,
+      "triton_tile32_ms": 0.16029695510864259,
+      "triton_tile64_ms": 0.16129024505615233,
+      "triton_tile128_ms": 0.15448063850402832,
+      "triton_best_GBps": 434.41601905503535
+    },
+    {
+      "batch": 128,
+      "ctx": 512,
+      "torch_ms": 3.3204531860351563,
+      "triton_tile32_ms": 0.30674943923950193,
+      "triton_tile64_ms": 0.3212287902832031,
+      "triton_tile128_ms": 0.30116863250732423,
+      "triton_best_GBps": 445.65639815340296
+    },
+    {
+      "batch": 256,
+      "ctx": 512,
+      "torch_ms": 6.579804077148437,
+      "triton_tile32_ms": 0.5957734298706054,
+      "triton_tile64_ms": 0.6477823638916016,
+      "triton_tile128_ms": 0.5982003021240234,
+      "triton_best_GBps": 450.56634374967143
+    }
+  ]
+}
