@@ -28,7 +28,6 @@ _ignore = [".git", "results", "**/__pycache__", ".venv", ".pytest_cache"]
 engine_image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install_from_requirements("requirements.txt")
-    .pip_install("datasets==3.1.0")
     .env({"HF_HOME": "/hf", "MODEL_ID": MODEL_ID})
     .add_local_dir(".", REPO_DIR, ignore=_ignore)
 )
