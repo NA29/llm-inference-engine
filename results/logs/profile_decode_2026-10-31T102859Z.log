@@ -1,0 +1,73 @@
+# cmd: bench.profile_decode
+# git_sha: c5c8c98
+# started: 2026-10-31T10:28:59Z
+# modal_task_id: ta-01M68R2R4VE926NJ6M0Y5WSFVR
+# exit_code: 0
+# nvidia-smi at end of run:
+Sat Oct 31 10:29:15 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |
+|  0%   30C    P0             62W /  300W |       3MiB /  23028MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 1514.55it/s]
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                           aten::linear         0.84%       1.122ms        11.07%      14.873ms      45.764us       0.000us         0.00%      29.364ms      90.351us           325  
+                                           aten::matmul         0.58%     779.737us         8.77%      11.780ms      36.247us       0.000us         0.00%      29.364ms      90.351us           325  
+                                               aten::mm         5.66%       7.601ms         8.19%      11.001ms      33.848us      29.364ms        50.74%      29.364ms      90.351us           325  
+                                            aten::copy_         5.76%       7.739ms        16.13%      21.667ms      18.132us      13.554ms        23.42%      13.554ms      11.342us          1195  
+ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f...         0.00%       0.000us         0.00%       0.000us       0.000us      12.525ms        21.64%      12.525ms     156.567us            80  
+                                           aten::einsum         2.86%       3.846ms        13.41%      18.009ms     112.554us       0.000us         0.00%       9.847ms      61.543us           160  
+ampere_bf16_s16816gemm_bf16_64x64_ldg8_f2f_stages_64...         0.00%       0.000us         0.00%       0.000us       0.000us       7.943ms        13.72%       7.943ms      93.447us            85  
+                                               aten::to         1.36%       1.828ms        22.89%      30.741ms      26.163us       0.000us         0.00%       7.073ms       6.020us          1175  
+                                         aten::_to_copy         2.83%       3.806ms        21.53%      28.913ms      28.627us       0.000us         0.00%       7.073ms       7.003us          1010  
+ampere_bf16_s16816gemm_bf16_128x64_ldg8_f2f_stages_6...         0.00%       0.000us         0.00%       0.000us       0.000us       6.922ms        11.96%       6.922ms      86.530us            80  
+                                          aten::reshape         1.87%       2.517ms         6.35%       8.535ms       8.890us       0.000us         0.00%       6.481ms       6.751us           960  
+                                            aten::clone         0.43%     582.032us         3.83%       5.150ms      32.189us       0.000us         0.00%       6.481ms      40.506us           160  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 134.310ms
+Self CUDA time total: 57.876ms
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 1611.75it/s]
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f...         0.00%       0.000us         0.00%       0.000us       0.000us      12.495ms        32.64%      12.495ms     156.188us            80  
+ampere_bf16_s16816gemm_bf16_64x64_ldg8_f2f_stages_64...         0.00%       0.000us         0.00%       0.000us       0.000us       7.934ms        20.73%       7.934ms      93.344us            85  
+ampere_bf16_s16816gemm_bf16_128x64_ldg8_f2f_stages_6...         0.00%       0.000us         0.00%       0.000us       0.000us       6.957ms        18.17%       6.957ms      86.967us            80  
+                                   _paged_decode_kernel         0.00%       0.000us         0.00%       0.000us       0.000us       1.750ms         4.57%       1.750ms      21.873us            80  
+void cutlass::Kernel2<cutlass_80_wmma_tensorop_bf16_...         0.00%       0.000us         0.00%       0.000us       0.000us       1.712ms         4.47%       1.712ms      21.397us            80  
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us       1.434ms         3.75%       1.434ms       2.538us           565  
+void at::native::unrolled_elementwise_kernel<at::nat...         0.00%       0.000us         0.00%       0.000us       0.000us     879.649us         2.30%     879.649us       2.707us           325  
+void at::native::reduce_kernel<512, 1, at::native::R...         0.00%       0.000us         0.00%       0.000us       0.000us     635.929us         1.66%     635.929us       3.854us           165  
+void at::native::index_elementwise_kernel<128, 4, at...         0.00%       0.000us         0.00%       0.000us       0.000us     581.212us         1.52%     581.212us       3.633us           160  
+void at::native::unrolled_elementwise_kernel<at::nat...         0.00%       0.000us         0.00%       0.000us       0.000us     475.876us         1.24%     475.876us       2.884us           165  
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us     453.927us         1.19%     453.927us       1.419us           320  
+void at::native::(anonymous namespace)::CatArrayBatc...         0.00%       0.000us         0.00%       0.000us       0.000us     416.707us         1.09%     416.707us       2.604us           160  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 39.985ms
+Self CUDA time total: 38.282ms
+
+{'eager': {'trace': 'traces/decode_eager.json.gz', 'gpu_kernel_events_in_5_steps': 4750}, 'graphs': {'trace': 'traces/decode_graphs.json.gz', 'gpu_kernel_events_in_5_steps': 3560}}
+wrote /root/results/profile_decode.json

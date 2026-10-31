@@ -1,0 +1,43 @@
+# cmd: bench.serving --scheduling continuous
+# git_sha: c5c8c98
+# started: 2026-10-31T10:20:36Z
+# modal_task_id: ta-01M68QKD47RC0A7ADGJCWB9A2R
+# exit_code: 0
+# nvidia-smi at end of run:
+Sat Oct 31 10:41:40 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:1B.0 Off |                    0 |
+|  0%   37C    P0             64W /  300W |       3MiB /  23028MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 986.97it/s]
+continuous rate=0.50 req/s  p99 TTFT=45 ms  mean TPOT=7.2 ms  -> ok
+continuous rate=1.00 req/s  p99 TTFT=47 ms  mean TPOT=7.4 ms  -> ok
+continuous rate=2.00 req/s  p99 TTFT=56 ms  mean TPOT=7.8 ms  -> ok
+continuous rate=4.00 req/s  p99 TTFT=62 ms  mean TPOT=8.7 ms  -> ok
+continuous rate=8.00 req/s  p99 TTFT=89 ms  mean TPOT=10.5 ms  -> ok
+continuous rate=16.00 req/s  p99 TTFT=129 ms  mean TPOT=18.7 ms  -> ok
+continuous rate=32.00 req/s  p99 TTFT=13177 ms  mean TPOT=74.2 ms  -> violates SLO
+continuous rate=24.00 req/s  p99 TTFT=647 ms  mean TPOT=58.2 ms  -> violates SLO
+continuous rate=20.00 req/s  p99 TTFT=158 ms  mean TPOT=27.3 ms  -> ok
+continuous rate=22.00 req/s  p99 TTFT=165 ms  mean TPOT=38.7 ms  -> ok
+continuous rate=23.00 req/s  p99 TTFT=178 ms  mean TPOT=48.2 ms  -> ok
+continuous: max rate under p99 TTFT <= 500 ms: 23.00 req/s
+wrote /root/results/serving_continuous.json

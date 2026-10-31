@@ -1,0 +1,67 @@
+{
+  "env": {
+    "timestamp_utc": "2026-10-31T10:37:14Z",
+    "git_sha": "c5c8c98",
+    "modal_task_id": "ta-01M68R99ZZ8P5THJJ942D9MKFR",
+    "hostname": "modal",
+    "python": "3.11.18",
+    "cpu": "unknown",
+    "gpu_query": "name, uuid, driver_version, memory.total [MiB], clocks.max.sm [MHz], clocks.max.memory [MHz], power.limit [W]\nNVIDIA A10G, GPU-d235ce85-0dd4-c1ef-9f7e-88df6324014f, 610.57.04, 23028 MiB, 1710 MHz, 6251 MHz, 300.00 W",
+    "nvidia_smi": "Sat Oct 31 10:37:14 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:1B.0 Off |                    0 |\n|  0%   45C    P0            189W /  300W |    7981MiB /  23028MiB |     97%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A               1      C   /bin/dumb-init                         7972MiB |\n+-----------------------------------------------------------------------------------------+",
+    "torch": "2.5.1+cu124",
+    "triton": "3.1.0",
+    "transformers": "4.46.3",
+    "cuda": "12.4",
+    "device": {
+      "name": "NVIDIA A10G",
+      "total_memory_gb": 22.06,
+      "sm_count": 80,
+      "capability": "8.6"
+    }
+  },
+  "workload": {
+    "kv_budget_gb": 4.0,
+    "num_prompts": 2000,
+    "input_len": 512,
+    "output_len": 128,
+    "range_ratio": 0.5,
+    "max_model_len": 2048
+  },
+  "num_kv_blocks": 8193,
+  "kv_budget_bytes": 4295491584,
+  "results": {
+    "prealloc": {
+      "mode": "prealloc",
+      "max_concurrent": 64,
+      "mean_concurrent": 62.82624567805666,
+      "p50_concurrent": 64.0,
+      "peak_blocks_used": 8192,
+      "preemptions": 0,
+      "elapsed_s": 101.270674591,
+      "output_tok_per_s": 2554.3919900281726
+    },
+    "prealloc_oracle": {
+      "mode": "prealloc_oracle",
+      "max_concurrent": 211,
+      "mean_concurrent": 191.39043590197576,
+      "p50_concurrent": 199.0,
+      "peak_blocks_used": 8192,
+      "preemptions": 0,
+      "elapsed_s": 83.10638889,
+      "output_tok_per_s": 3112.6969112133684
+    },
+    "paged": {
+      "mode": "paged",
+      "max_concurrent": 245,
+      "mean_concurrent": 211.82112899998626,
+      "p50_concurrent": 222.0,
+      "peak_blocks_used": 8192,
+      "preemptions": 24,
+      "elapsed_s": 81.250204282,
+      "output_tok_per_s": 3183.807379759518
+    }
+  },
+  "mean_concurrency_ratio": 3.3715388642738695,
+  "mean_concurrency_ratio_vs_oracle": 1.1067487672606298,
+  "peak_concurrency_ratio": 3.828125
+}

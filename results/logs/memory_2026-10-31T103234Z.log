@@ -1,0 +1,35 @@
+# cmd: bench.memory
+# git_sha: c5c8c98
+# started: 2026-10-31T10:32:34Z
+# modal_task_id: ta-01M68R99ZZ8P5THJJ942D9MKFR
+# exit_code: 0
+# nvidia-smi at end of run:
+Sat Oct 31 10:37:16 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:1B.0 Off |                    0 |
+|  0%   39C    P0             68W /  300W |       3MiB /  23028MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 1243.25it/s]
+{'mode': 'prealloc', 'max_concurrent': 64, 'mean_concurrent': 62.82624567805666, 'p50_concurrent': 64.0, 'peak_blocks_used': 8192, 'preemptions': 0, 'elapsed_s': 101.270674591, 'output_tok_per_s': 2554.3919900281726}
+{'mode': 'prealloc_oracle', 'max_concurrent': 211, 'mean_concurrent': 191.39043590197576, 'p50_concurrent': 199.0, 'peak_blocks_used': 8192, 'preemptions': 0, 'elapsed_s': 83.10638889, 'output_tok_per_s': 3112.6969112133684}
+{'mode': 'paged', 'max_concurrent': 245, 'mean_concurrent': 211.82112899998626, 'p50_concurrent': 222.0, 'peak_blocks_used': 8192, 'preemptions': 24, 'elapsed_s': 81.250204282, 'output_tok_per_s': 3183.807379759518}
+paged fits 3.37x more concurrent requests on average (245 vs 64 at peak)
+wrote /root/results/memory.json
