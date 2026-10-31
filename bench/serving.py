@@ -58,6 +58,7 @@ def main():
     ap.add_argument("--duration", type=float, default=60.0, help="seconds of arrivals per rate")
     ap.add_argument("--start-rate", type=float, default=0.5)
     ap.add_argument("--min-requests", type=int, default=200, help="per rate, so p99 is not just the max")
+    ap.add_argument("--rates", default="", help="comma-separated fixed rates to sweep instead of searching")
     args = ap.parse_args()
 
     engine = LLMEngine(EngineConfig(scheduling=args.scheduling))
@@ -73,16 +74,22 @@ def main():
               f"mean TPOT={r['tpot_ms']['mean']:.1f} ms  -> {'ok' if r['meets_slo'] else 'violates SLO'}")
         return r["meets_slo"]
 
-    # Double the rate until the SLO breaks, then bisect between the last pass and first failure.
-    lo, hi, rate = 0.0, None, args.start_rate
-    while hi is None:
-        if measure(rate):
-            lo, rate = rate, rate * 2
-        else:
-            hi = rate
-    for _ in range(4):
-        mid = (lo + hi) / 2
-        lo, hi = (mid, hi) if measure(mid) else (lo, mid)
+    if args.rates:
+        # Fixed grid: used for static batching, which can miss the SLO at every practical rate
+        # (a request arriving mid-batch waits for the whole batch), so a search would never end.
+        passing = [r for r in map(float, args.rates.split(",")) if measure(r)]
+        lo = max(passing, default=0.0)
+    else:
+        # Double the rate until the SLO breaks, then bisect between the last pass and first failure.
+        lo, hi, rate = 0.0, None, args.start_rate
+        while hi is None:
+            if measure(rate):
+                lo, rate = rate, rate * 2
+            else:
+                hi = rate
+        for _ in range(4):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if measure(mid) else (lo, mid)
 
     print(f"{args.scheduling}: max rate under p99 TTFT <= {args.slo_ms:.0f} ms: {lo:.2f} req/s")
     save_result(f"serving_{args.scheduling}", {"scheduling": args.scheduling, "workload": vars(args),
