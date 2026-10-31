@@ -52,3 +52,15 @@ def test_preemption_recompute_gives_same_output(engine):
     engine.block_manager.free_blocks = type(engine.block_manager.free_blocks)(range(1, engine.num_blocks))
     engine.block_manager.watermark_blocks = watermark
 
+
+@requires_cuda
+def test_triton_cuda_graph_engine_matches_eager(engine):
+    prompts = random_prompts(37, seed=2)  # 37 -> padded to the 48 bucket
+    params = SamplingParams(max_tokens=40, ignore_eos=True)
+    expected = engine.generate(prompts, params)
+    fast = LLMEngine(EngineConfig(dtype=torch.float32, attn_backend="triton", use_cuda_graphs=True,
+                                  num_kv_blocks=2048, max_model_len=1024, max_num_seqs=64))
+    assert fast.graph_runner is not None and 48 in fast.graph_runner.graphs
+    assert fast.generate(prompts, params) == expected
+    del fast
+    torch.cuda.empty_cache()
